@@ -4,9 +4,9 @@ import definitions, images
 printable = set(string.printable)
 	
 class Word:
-	def __init__(self, word, overviews, definitions, origin, imgs):
+	def __init__(self, word, overview, definitions, origin, imgs):
 		self.word = word
-		self.overviews = overviews
+		self.overview = overview
 		self.definitions = definitions
 		self.origin = origin
 		self.imgs = imgs
@@ -14,7 +14,7 @@ class Word:
 	def prettify(self):
 		s = 'Defintion of ' + self.word
 		s += '\n\n'
-		for line in self.overviews:
+		for line in self.overview:
 			s += line
 			s += '\n\n'
 		defs_len = len(self.definitions)
@@ -50,9 +50,14 @@ def find_word(word):
 		imgs
 	)
 
-def web_page():
+def web_page(w):
+	word = find_word(w)
 	s  = '<html>'
 	s += '<body>'
-	s += '<body>'
+	s += '<h1>'+word.word.capitalize()+'</h1>'
+	if word.overview:
+		s += '<h2>'+word.overview+'</h2>'
+		for line in word.overview[1:]:
+			s += '<h3>'+line+'</h3>'
 	s += '</body>'
 	s += '</html>'
