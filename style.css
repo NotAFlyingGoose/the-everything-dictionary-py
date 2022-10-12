@@ -1,0 +1,164 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap');
+
+html {
+	font-family: 'Roboto Condensed', sans-serif;
+	background-color: #222222;
+	color: white;
+}
+
+#word {
+	margin-left: 10%;
+	margin-right: 10%;
+}
+
+#wordOverview {
+	width: 60%;
+	margin-left: 2em;
+}
+
+h3 {
+	font-size: 18px;
+	line-height: 175%;
+	font-weight: normal;
+}
+
+h4 {
+	font-size: 14px;
+	line-height: 175%;
+	font-weight: normal;
+}
+
+ul {
+	list-style-type: none;
+}
+
+.defContent {
+	padding: 1em 0 0.5em 0;
+	line-height: 150%;
+}
+
+.part_of_speech {
+	border-radius: 15px;
+	padding: 0px 6px 3px 6px;
+}
+
+.noun {
+	border: 1px solid lime;
+	color: lime;
+}
+
+.adjective {
+	border: 1px solid cornflowerblue;
+	color: cornflowerblue;
+}
+
+.verb {
+	border: 1px solid orange;
+	color: orange;
+}
+
+.adverb {
+	border: 1px solid violet;
+	color: violet;
+}
+
+.slang {
+	border: 1px solid khaki;
+	color: khaki;
+}
+
+.interjection {
+	border: 1px solid indianred;
+	color: indianred;
+}
+
+.phrase {
+	border: 1px solid hotpink;
+	color: hotpink;
+}
+
+.proverb {
+	border: 1px solid salmon;
+	color: salmon;
+}
+
+.preposition {
+	border: 1px solid aquamarine;
+	color: aquamarine;
+}
+
+.conjunction {
+	border: 1px solid salmon;
+	color: salmon;
+}
+
+.prefix {
+	border: 1px solid green;
+	color: green;
+}
+
+.suffix {
+	border: 1px solid cadetblue;
+	color: cadetblue;
+}
+
+.definition {
+	padding-left: 1em;
+}
+
+.example {
+	font-style: italic;
+	color: gray;
+	padding-left: 1em;
+}
+
+.img-container {
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.mass {
+	max-width: 30%;
+	height: auto;
+	border-radius: 10px;
+}
+
+p {
+	color: gray;
+}
+
+#search {
+	width: 60%;
+	border-radius: 2em;
+	padding: 1em;
+	margin: auto;
+	display: block;
+	font-size: 1em;
+	background-color: #333333;
+	color: white;
+	border-style: hidden;
+}
+
+#search:focus {
+  outline: none;
+}
+
+#title {
+	color: rgb(107, 200, 255);
+}
+
+.logo {
+    filter: brightness(75%);
+}
+
+a {
+    text-decoration: none;
+    color: lightgray;
+}
+
+#word-overview {
+	margin-left: 2em;
+}

@@ -1,0 +1,4 @@
+[[words]]
+word = 'The Everything Dictionary'
+overview = [ "If you don't know the words to something, you can't know anything about it. That's why I decided to make this dictionary: To help you understand and communicate with the world around you.", "The Everything Dictionary is completely free to use. The ads on the website go straight back into making sure that it's available for everyone." ]
+def = { type = 'noun', text = 'A website for learning what words mean.' }

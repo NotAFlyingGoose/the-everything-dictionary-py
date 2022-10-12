@@ -1,10 +1,14 @@
-import requests, re
+import requests
+import re
+import string
 from bs4 import BeautifulSoup
 
 protocol = 'https'
 dict_url_base = protocol + '://vocabulary.com'
 slang_url_base = protocol + '://urbandictionary.com'
-deriv_url_base = protocol + '://wiktionary.org'
+wiki_url_base = protocol + '://wiktionary.org'
+
+printable = set(string.printable)
 
 class Definition:
 	def __init__(self, part_of_speech, definition, examples):
@@ -69,18 +73,18 @@ def find_formal_def(word):
 		
 	web_page = BeautifulSoup(html_response, 'lxml')
 	word_overview = web_page.find(class_='word-area')
-	
 	if not word_overview:
-		slang_defs = find_slang_def(word)
-		if not slang_defs:
-			return [], None
-		return Word(
-			word,
-			['This word is slang. Definitions may be innacurate.', 'All these definitions were pulled from people who may not know the true meaning of the word.'],
-			slang_defs,
-			find_word_origin(word),
-			[]
-		)
+		return [], None
+
+	overviews = []
+	short_overview = word_overview.find(class_='short')
+	if short_overview:
+		overviews.append(
+			''.join(filter(lambda x: x in printable, short_overview.get_text())))
+	long_overview = word_overview.find(class_='long')
+	if long_overview:
+		overviews.append(
+			''.join(filter(lambda x: x in printable, long_overview.get_text())))
 
 	word_definitions = web_page.find(class_='word-definitions').find('ol').find_all('li')
 
@@ -92,6 +96,7 @@ def find_formal_def(word):
 		if not first_type:
 			first_type = type_
 		def_ = join(def_area.findAll(text=True, recursive=False)).strip()
+		def_ = ''.join(filter(lambda x: x in printable, def_))
 		
 		ex_area = li.find_all(class_='example')
 		examples = []
@@ -100,23 +105,57 @@ def find_formal_def(word):
 		
 		definitions.append(Definition(type_, def_, examples))
 	
-	return [
-		word_overview.find(class_='short').get_text(),
-		word_overview.find(class_='long').get_text()
-	], definitions
+	return overviews, definitions
 
+def fits_criteria(el):
+	return not (el.has_attr('class') and el['class'][0] in ['HQToggle', 'ib-brac', 'ib-content', 'mw-editsection', 'floatright']) and not (el.name in ['ul', 'sup', 'dl', 'br']) and el.children
 
-def find_word_origin(word):
-	html_response = requests.get(deriv_url_base + '/wiki/' + word, 
+def get_wiki_text(el):
+	s = ''
+	for child in el:
+		is_tag = hasattr(child, 'has_attr')
+		if not is_tag:
+			s += child
+		else:
+			if fits_criteria(child):
+				s += get_wiki_text(child)
+	return s.replace('\n', '').strip()
+
+def find_wiki_info(word):
+	html_response = requests.get(wiki_url_base + '/wiki/' + word, 
 		headers={
 			'responseType': 'document'
 		}).text
 	
 	web_page = BeautifulSoup(html_response, 'lxml')
-	title = web_page.find(id='Etymology')
+
+	current_el = web_page.find(id='English')
+	if not current_el:
+		return '', []
+	current_el = current_el.parent
+
+	derivation = ''
+	definitions = []
+	last_title = ''
+	while True:
+		if not current_el:
+			break
+		
+		if current_el.name == 'h3' or current_el.name == 'h4' or current_el.name == 'h5':
+			last_title = get_wiki_text(current_el).lower()
+		if current_el.name == 'ol':
+			for def_ in current_el.children:
+				i_text = get_wiki_text(def_)
+				if not i_text:
+					continue
+				definitions.append(Definition(last_title, i_text, []))
+		elif current_el.name == 'hr':
+			break
+		elif current_el.name == 'p' and last_title.startswith('etymology'):
+			if derivation:
+				derivation += '\n'
+			derivation += get_wiki_text(current_el)
+
+		current_el = current_el.next_sibling
 	
-	if not title:
-		return ''
-	
-	ety = title.parent.next_sibling.next_sibling
-	return ety.get_text()
+	return derivation, definitions

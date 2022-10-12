@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>The Everything Dictionary</title>
+        <link rel="stylesheet" href="../style.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="scrape.js"></script>
+        <script src="define.js" defer></script>
+    </head>
+    <body>
+        <a href="/">
+            <img class="logo" src="../logo_small.png" style="height: 4em; position: absolute; top: 1em;">
+        </a>
+        <input style="margin-top: 1.5em; margin-bottom: 2em;" type="text" placeholder="Learn a new word" id="search" onkeydown="search(this)"/>
+        <div id="word">
+
+        </div>
+    </body>
+</html>

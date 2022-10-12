@@ -5,7 +5,7 @@ protocol = 'https'
 stock_url_base = protocol + '://stock.adobe.com'
 google_url_base = protocol + '://google.com'
 
-def find_images(word):
+def find_stock(word):
 	html_response = requests.get(stock_url_base + '/search?k='+word,
 		headers={
 			'responseType': 'document'
@@ -21,3 +21,6 @@ def find_images(word):
 			break
 	
 	return imgs
+
+def find_images(word):
+	return [find_stock(word)]
